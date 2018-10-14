@@ -9,34 +9,92 @@ namespace AtomicGames2018
 {
     class Bot
     {
-        Stopwatch stopwatch = new Stopwatch(); // Used for timing moves
+        Stopwatch myStopwatch; // Used for timing moves
+        int myTimeLimit = 2000;
+
+        /// Bot constructor
+        public Bot(int timeLimit)
+        {
+            myTimeLimit = timeLimit;
+            myStopwatch = new Stopwatch();
+        }
 
         /// Find best move given a game Board object and time limit
-        public int getMove(Board board, int timeLimit)
+        public int getMove(Board board)
         {
             // Begin timing
-            stopwatch.Reset();
-            stopwatch.Start();
+            myStopwatch.Reset();
+            myStopwatch.Start();
 
             // Iterate search depth until out of time...
             // ...or depth too far (meaning bot sees endgame)
             int depth = 0;
             int lastMove = -1;
             int move = -1;
-            while (stopwatch.ElapsedMilliseconds < timeLimit && depth <= 100)
+            while (myStopwatch.ElapsedMilliseconds < myTimeLimit && depth <= 100)
             {
                 lastMove = move;
-                move = alphabeta(board, depth, int.MinValue, int.MaxValue).item1;
+                move = alphabeta(board, depth, int.MinValue, int.MaxValue).Item1;
                 depth++;
             }
 
-            return lastMove; // move may contain an uneducated decision
+            return lastMove; // because move may contain an uneducated decision
         }
 
         /// Alpha-beta algorithm
-        public Tuple<int, int> alphabeta(Board board, int depth, int a, int b)
+        Tuple<int, int> alphabeta(Board board, int depth, int a, int b)
         {
+            int move = -1;
+            int v1, v2;
 
+            if (depth == 0 || board.myGameOver)
+                return Tuple.Create(-1, evaluate(board));
+            if (board.myPlayersTurn == 1) // Maximizing
+            {
+                v1 = int.MinValue;
+                for (int i = 0; i < 0; i++) // TODO: should iterate through moves
+                {
+                    if (!board.legalMove(i) || myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
+                        continue;
+                    Board tempBoard = new Board(board);
+                    tempBoard.makeMove(i);
+                    v2 = alphabeta(tempBoard, depth - 1, a, b).Item2;
+                    if (v2 > v1)
+                    {
+                        v1 = v2;
+                        move = i;
+                    }
+                    a = Math.Max(a, v1);
+                    if (a >= b)
+                        break;
+                }
+            } else
+            { // Minimizing
+                v1 = int.MaxValue;
+                for (int i = 0; i < 0; i++) // TODO: should iterate through moves
+                {
+                    if (!board.legalMove(i) || myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
+                        continue;
+                    Board tempBoard = new Board(board);
+                    tempBoard.makeMove(i);
+                    v2 = alphabeta(tempBoard, depth - 1, a, b).Item2;
+                    if (v2 < v1)
+                    {
+                        v1 = v2;
+                        move = i;
+                    }
+                    b = Math.Min(b, v1);
+                    if (a >= b)
+                        break;
+                }
+            }
+            return Tuple.Create(move, v1);
+        }
+
+        /// Board evaluation function
+        public int evaluate(Board b)
+        {
+            return 0;
         }
     }
 }
