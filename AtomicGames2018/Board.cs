@@ -28,10 +28,10 @@ namespace AtomicGames2018
             myWinner = b.myWinner;
         }
 
-        /// Makes a move, returns legalMove()
-        public bool makeMove(int pos)
+        ///  We probably need some sort of constructor / update function to 
+        ///  update our board to the new Atomic Object game state
+        public void update(List<int> updates)
         {
-            return false;
         }
 
         /// Checks and returns if a move is legal
@@ -45,6 +45,12 @@ namespace AtomicGames2018
         {
             List<int> moves = new List<int>();
             return moves;
+        }
+
+        /// Makes a move, returns legalMove()
+        public bool makeMove(int pos)
+        {
+            return false;
         }
 
         /// Checks for game over conditions,
