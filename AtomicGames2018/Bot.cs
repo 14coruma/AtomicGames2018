@@ -10,7 +10,7 @@ namespace AtomicGames2018
     class Bot
     {
         Stopwatch myStopwatch; // Used for timing moves
-        int myTimeLimit = 2000;
+        int myTimeLimit;
 
         /// Bot constructor
         public Bot(int timeLimit)
@@ -94,7 +94,13 @@ namespace AtomicGames2018
         /// Board evaluation function
         public int evaluate(Board b)
         {
-            return 0;
+            // TODO: improve heuristic
+            if (b.myWinner == 0)
+                return 0;
+            else if (b.myWinner == 1)
+                return 1;
+            else
+                return -1;
         }
     }
 }
