@@ -40,6 +40,13 @@ namespace AtomicGames2018
             return false;
         }
 
+        /// Returns a list of all possible moves
+        public List<int> moveSpace()
+        {
+            List<int> moves = new List<int>();
+            return moves;
+        }
+
         /// Checks for game over conditions,
         /// returns value of the winning player
         public int gameOver()

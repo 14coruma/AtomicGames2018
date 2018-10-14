@@ -44,7 +44,7 @@ namespace AtomicGames2018
         /// Alpha-beta algorithm
         Tuple<int, int> alphabeta(Board board, int depth, int a, int b)
         {
-            int move = -1;
+            int bestMove = -1;
             int v1, v2;
 
             if (depth == 0 || board.myGameOver)
@@ -52,17 +52,17 @@ namespace AtomicGames2018
             if (board.myPlayersTurn == 1) // Maximizing
             {
                 v1 = int.MinValue;
-                for (int i = 0; i < 0; i++) // TODO: should iterate through moves
+                foreach (int move in board.moveSpace())
                 {
-                    if (!board.legalMove(i) || myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
-                        continue;
+                    if (myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
+                        break;
                     Board tempBoard = new Board(board);
-                    tempBoard.makeMove(i);
+                    tempBoard.makeMove(move);
                     v2 = alphabeta(tempBoard, depth - 1, a, b).Item2;
                     if (v2 > v1)
                     {
                         v1 = v2;
-                        move = i;
+                        bestMove = move;
                     }
                     a = Math.Max(a, v1);
                     if (a >= b)
@@ -71,24 +71,24 @@ namespace AtomicGames2018
             } else
             { // Minimizing
                 v1 = int.MaxValue;
-                for (int i = 0; i < 0; i++) // TODO: should iterate through moves
+                foreach (int move in board.moveSpace())
                 {
-                    if (!board.legalMove(i) || myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
-                        continue;
+                    if (myStopwatch.ElapsedMilliseconds > myTimeLimit - 1)
+                        break;
                     Board tempBoard = new Board(board);
-                    tempBoard.makeMove(i);
+                    tempBoard.makeMove(move);
                     v2 = alphabeta(tempBoard, depth - 1, a, b).Item2;
                     if (v2 < v1)
                     {
                         v1 = v2;
-                        move = i;
+                        bestMove = move;
                     }
                     b = Math.Min(b, v1);
                     if (a >= b)
                         break;
                 }
             }
-            return Tuple.Create(move, v1);
+            return Tuple.Create(bestMove, v1);
         }
 
         /// Board evaluation function
